@@ -1,0 +1,70 @@
+﻿@model IPagedList<CRUD.TASK.MVC.Models.Category>
+@using PagedList;
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Index";
+    @Html.Raw(TempData["InsertMessage"])
+    @Html.Raw(TempData["UpdateMessage"])
+    @Html.Raw(TempData["DeleteMessage"])
+}
+
+<h3>Category List</h3>
+<p>
+    @using (Html.BeginForm("Index", "Categories", FormMethod.Get))
+    {
+        <b>
+            Search By:
+        </b> @Html.RadioButton("searchBy", "CategoryName", true)<text>CategoryName</text>
+
+        @Html.TextBox("search")<input type="submit" value="Search" />
+
+
+    }
+</p>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.First().CategoryId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().CategoryName)
+        </th>
+        <th></th>
+    </tr>
+    @if (Model.Count() == 0)
+    {
+        <tr>
+            <td colspan="4">
+                <p><h4><b> No Data Found....!</b></h4></p>
+            </td>
+        </tr>
+    }
+
+    else
+    {
+
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CategoryId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CategoryName)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.CategoryId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.CategoryId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.CategoryId })
+                </td>
+            </tr>
+        }
+    }
+
+</table>
+@Html.PagedListPager(Model, i => Url.Action("Index", "Categories", new { i }))
